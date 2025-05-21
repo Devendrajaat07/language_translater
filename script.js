@@ -34,18 +34,25 @@ translateBtn.addEventListener("click", () => {
     translateTo = selectTag[1].value;
     if(!text) return;
     toText.setAttribute("placeholder", "Translating...");
-    let apiUrl = `https://api.mymemory.translated.net/get?q=${text}&langpair=${translateFrom}|${translateTo}`;
-    fetch(apiUrl).then(res => res.json()).then(data => {
-        toText.value = data.responseData.translatedText;
-        data.matches.forEach(data => {
-            if(data.id === 0) {
-                toText.value = data.translation;
-            }
-        });
-        toText.setAttribute("placeholder", "Translation");
-    });
-});
+    let apiUrl = `https://libretranslate.de/translate`;
 
+fetch(apiUrl, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        q: text,
+        source: translateFrom,
+        target: translateTo,
+        format: "text"
+    })
+})
+.then(res => res.json())
+.then(data => {
+    toText.value = data.translatedText;
+    toText.setAttribute("placeholder", "Translation");
+});
 icons.forEach(icon => {
     icon.addEventListener("click", ({target}) => {
         if(!fromText.value || !toText.value) return;
