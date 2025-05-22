@@ -74,4 +74,3 @@ icons.forEach(icon => {
             speechSynthesis.speak(utterance);
         }
    });
-});
